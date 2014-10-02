@@ -7,3 +7,7 @@ Why ?
 - to mount LUKS volumes automatically without using a local keyfile or a USB
   stick
 - to be able to disable remotely the next automount of volume(s)
+
+How ?
+- this iniscript isn't usable alone, special setup is required.
+  A link to the setup steps will be included here soon... (I hope).
