@@ -1,0 +1,91 @@
+#!/bin/bash
+### BEGIN INIT INFO
+# Provides:          cryptomounts
+# Required-Start:    $network $syslog
+# Required-Stop:     $network $syslog
+# Default-Start:     S
+# Default-Stop:
+# Short-Description: Mounts crypto volumes
+# Description:       Mounts / Umounts crypto volumes that need remote resources
+### END INIT INFO
+
+# Author: Mathias Bocquet <mbocquet@sekoya.org>
+
+# Do NOT "set -e"
+
+# PATH should only include /usr/* if it runs after the mountnfs.sh script
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+DESC="cryptomounts"
+NAME="cryptomounts"
+SCRIPTNAME=/etc/init.d/$NAME
+
+# configuration variable file
+CONFIG="/etc/default/$NAME"
+
+# Load the VERBOSE setting and other rcS variables
+. /lib/init/vars.sh
+
+# Define LSB log_* functions.
+# Depend on lsb-base (>= 3.2-14) to ensure that this file is present
+# and status_of_proc is working.
+. /lib/lsb/init-functions
+
+do_start()
+{
+	while read ENCRYPTED_DEVICE DECRYPTED_NAME MOUNT_POINT PASSPHRASE_URL
+	do
+		if [[ ${ENCRYPTED_DEVICE} =~ ^# ]]
+		then
+			continue
+		else
+			PASSPHRASE="$(curl -ks --netrc-file /root/.netrc ${PASSPHRASE_URL})"
+			echo "${PASSPHRASE}"|cryptsetup luksOpen ${ENCRYPTED_DEVICE} ${DECRYPTED_NAME}
+			mount ${MOUNT_POINT}
+		fi
+	done</etc/default/$NAME
+	return $?
+}
+
+do_stop()
+{
+	while read ENCRYPTED_DEVICE DECRYPTED_NAME MOUNT_POINT PASSPHRASE_URL
+	do
+		if [[ ${ENCRYPTED_DEVICE} =~ ^# ]]
+		then
+			continue
+		else
+			umount ${MOUNT_POINT}
+			cryptsetup luksClose ${DECRYPTED_NAME}
+		fi
+	done</etc/default/$NAME
+	return $?
+	return "$RETVAL"
+}
+
+case "$1" in
+  start)
+	[ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" "$NAME"
+	do_start
+	case "$?" in
+		0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
+		2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
+	esac
+	;;
+  stop)
+	[ "$VERBOSE" != no ] && log_daemon_msg "Stopping $DESC" "$NAME"
+	do_stop
+	case "$?" in
+		0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
+		2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
+	esac
+	;;
+  status)
+	status_of_proc "$DAEMON" "$NAME" && exit 0 || exit $?
+	;;
+  *)
+	echo "Usage: $SCRIPTNAME {start|stop|status}" >&2
+	exit 3
+	;;
+esac
+
+:
