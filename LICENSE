@@ -1,5 +1,5 @@
 'cryptomounts'. Automount LUKS volumes with remote keyphrase.
-Copyright © 2013-2014 Mathias Bocquet (mbocquet@sekoya.org)
+Copyright © 2013-2015 Mathias Bocquet (mbocquet@sekoya.org)
 
 This file is part of 'cryptomounts'.
 
