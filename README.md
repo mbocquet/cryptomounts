@@ -41,3 +41,32 @@ by
 
 - curl
 - a proper .netrc file to access remote URL over https
+
+## Installation
+### Debian based distributions
+- copy `cryptomounts.sysinit` to `/etc/init.d/cryptomounts`
+
+<code>
+cp cryptomounts.sysinit /etc/init.d/cryptomounts
+</code>
+
+- make the script executable
+
+<code>
+chmod +x /etc/init.d/cryptomounts
+</code>
+
+- copy `cryptomounts.default` to `/etc/default/cryptomounts`
+
+<code>
+cp cryptomounts.default /etc/default/cryptomounts
+</code>
+
+- Customize `/etc/default/cryptomounts`
+
+- Insert script into sysinit process
+
+<code>
+insserv -d cryptomounts
+</code>
+
