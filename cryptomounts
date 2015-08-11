@@ -3,8 +3,8 @@
 # Provides:          cryptomounts
 # Required-Start:    $network $syslog
 # Required-Stop:     $network $syslog
-# Default-Start:     S
-# Default-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
 # Short-Description: Mounts crypto volumes
 # Description:       Mounts / Umounts crypto volumes that need remote resources
 ### END INIT INFO
@@ -15,7 +15,7 @@
 
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
-DESC="cryptomounts"
+DESC="Cryptomounts"
 NAME="cryptomounts"
 SCRIPTNAME=/etc/init.d/$NAME
 
@@ -32,7 +32,7 @@ CONFIG="/etc/default/$NAME"
 
 do_start()
 {
-	while read ENCRYPTED_DEVICE DECRYPTED_NAME MOUNT_POINT PASSPHRASE_URL
+	while read ENCRYPTED_DEVICE DECRYPTED_NAME PASSPHRASE_URL
 	do
 		if [[ ${ENCRYPTED_DEVICE} =~ ^# ]]
 		then
@@ -40,7 +40,6 @@ do_start()
 		else
 			PASSPHRASE="$(curl -ks --netrc-file /root/.netrc ${PASSPHRASE_URL})"
 			echo "${PASSPHRASE}"|cryptsetup luksOpen ${ENCRYPTED_DEVICE} ${DECRYPTED_NAME}
-			mount ${MOUNT_POINT}
 		fi
 	done</etc/default/$NAME
 	return $?
@@ -48,14 +47,14 @@ do_start()
 
 do_stop()
 {
-	while read ENCRYPTED_DEVICE DECRYPTED_NAME MOUNT_POINT PASSPHRASE_URL
+	while read ENCRYPTED_DEVICE DECRYPTED_NAME PASSPHRASE_URL
 	do
 		if [[ ${ENCRYPTED_DEVICE} =~ ^# ]]
 		then
 			continue
 		else
-			umount ${MOUNT_POINT}
-			cryptsetup luksClose ${DECRYPTED_NAME}
+#			cryptsetup luksClose ${DECRYPTED_NAME}
+			true
 		fi
 	done</etc/default/$NAME
 	return $?
