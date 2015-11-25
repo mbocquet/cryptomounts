@@ -34,14 +34,12 @@ do_start()
 {
 	while read ENCRYPTED_DEVICE DECRYPTED_NAME PASSPHRASE_URL
 	do
-		if [[ ${ENCRYPTED_DEVICE} =~ ^# ]]
+		if ! [[ ${ENCRYPTED_DEVICE} =~ ^# ]]
 		then
-			continue
-		else
 			PASSPHRASE="$(curl -ks --netrc-file /root/.netrc ${PASSPHRASE_URL})"
 			echo "${PASSPHRASE}"|cryptsetup luksOpen ${ENCRYPTED_DEVICE} ${DECRYPTED_NAME}
 		fi
-	done</etc/default/$NAME
+	done<$CONFIG
 	return $?
 }
 
@@ -49,14 +47,11 @@ do_stop()
 {
 	while read ENCRYPTED_DEVICE DECRYPTED_NAME PASSPHRASE_URL
 	do
-		if [[ ${ENCRYPTED_DEVICE} =~ ^# ]]
+		if ! [[ ${ENCRYPTED_DEVICE} =~ ^# ]]
 		then
-			continue
-		else
 			cryptsetup luksClose ${DECRYPTED_NAME}
-			true
 		fi
-	done</etc/default/$NAME
+	done<$CONFIG
 	return $?
 	return "$RETVAL"
 }
