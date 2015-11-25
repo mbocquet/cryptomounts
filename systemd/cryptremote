@@ -1,0 +1,46 @@
+#!/bin/bash
+#
+# Open LUKS volumes that need remote resources
+#
+# Copyright © 2013-2015 Mathias Bocquet (mbocquet@sekoya.org)
+
+NAME="$(basename $0)"
+
+# configuration variable file
+CONFIG="/etc/default/$NAME"
+
+do_open()
+{
+	while read ENCRYPTED_DEVICE DECRYPTED_NAME PASSPHRASE_URL
+	do
+		if ! [[ ${ENCRYPTED_DEVICE} =~ ^# ]]
+		then
+			PASSPHRASE="$(curl -ks --netrc-file /root/.netrc ${PASSPHRASE_URL})"
+			echo "${PASSPHRASE}"|cryptsetup luksOpen ${ENCRYPTED_DEVICE} ${DECRYPTED_NAME}
+		fi
+	done<$CONFIG
+}
+
+do_close()
+{
+	while read ENCRYPTED_DEVICE DECRYPTED_NAME PASSPHRASE_URL
+	do
+		if ! [[ ${ENCRYPTED_DEVICE} =~ ^# ]]
+		then
+			cryptsetup luksClose ${DECRYPTED_NAME}
+		fi
+	done<$CONFIG
+}
+
+case "$1" in
+  open)
+	do_open
+	;;
+  close)
+	do_close
+	;;
+  *)
+	echo "Usage: $NAME {open|close}" >&2
+	exit 1
+	;;
+esac
