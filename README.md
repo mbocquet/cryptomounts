@@ -43,11 +43,11 @@ by
 - a proper .netrc file to access remote URL over https
 
 ## Installation
-### Debian based distributions
-- copy `cryptremote.sysinit` to `/etc/init.d/cryptremote`
+### Debian based distributions with sysinit
+- copy `sysinit/cryptremote.sysinit` to `/etc/init.d/cryptremote`
 
 <code>
-cp cryptremote.sysinit /etc/init.d/cryptremote
+cp sysinit/cryptremote.sysinit /etc/init.d/cryptremote
 </code>
 
 - make the script executable
@@ -70,3 +70,30 @@ cp cryptremote.default /etc/default/cryptremote
 insserv -d cryptremote
 </code>
 
+### Debian based distributions with systemd
+- copy `systemd/cryptremote.service` to `/etc/systemd/system/`
+
+<code>
+cp systemd/cryptremote.service /etc/systemd/system/
+</code>
+
+- copy `systemd/cryptremote` to `/usr/local/sbin`
+- make the script executable
+
+<code>
+chmod +x /usr/local/sbin/cryptremote
+</code>
+
+- copy `cryptremote.default` to `/etc/default/cryptremote`
+
+<code>
+cp cryptremote.default /etc/default/cryptremote
+</code>
+
+- Customize `/etc/default/cryptremote`
+
+- Reload systemd daemon
+
+<code>
+systemctl daemon-reload
+</code>
