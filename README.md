@@ -1,7 +1,7 @@
-# cryptomounts
+# cryptremote
 
-This is a Debian based initscript used to automount LUKS volume(s) using
-a keyphrase located on remote(s) server(s).
+This is a Debian based initscript used to open LUKS volume(s) using a keyphrase
+located on remote(s) server(s).
 
 ## Why ?
 
@@ -16,7 +16,7 @@ keyphrase is used to open LUKS volume(s). As volumes are opened, they can be
 mounted via autofs or fstab. Volume(s) unmounting is done via the standard
 shutdown process.
 
-In case autofs is used, its initscript must be modified to add 'cryptomounts'
+In case autofs is used, its initscript must be modified to add 'cryptremote'
 as a dependency :
 
 /etc/init.d/autofs
@@ -32,8 +32,8 @@ Replace :
 by
 
 <pre>
-+# Required-Start: $network $remote_fs $syslog cryptomounts
-+# Required-Stop: $network $remote_fs $syslog cryptomounts
++# Required-Start: $network $remote_fs $syslog cryptremote
++# Required-Stop: $network $remote_fs $syslog cryptremote
 ...
 </pre>
 
@@ -44,29 +44,29 @@ by
 
 ## Installation
 ### Debian based distributions
-- copy `cryptomounts.sysinit` to `/etc/init.d/cryptomounts`
+- copy `cryptremote.sysinit` to `/etc/init.d/cryptremote`
 
 <code>
-cp cryptomounts.sysinit /etc/init.d/cryptomounts
+cp cryptremote.sysinit /etc/init.d/cryptremote
 </code>
 
 - make the script executable
 
 <code>
-chmod +x /etc/init.d/cryptomounts
+chmod +x /etc/init.d/cryptremote
 </code>
 
-- copy `cryptomounts.default` to `/etc/default/cryptomounts`
+- copy `cryptremote.default` to `/etc/default/cryptremote`
 
 <code>
-cp cryptomounts.default /etc/default/cryptomounts
+cp cryptremote.default /etc/default/cryptremote
 </code>
 
-- Customize `/etc/default/cryptomounts`
+- Customize `/etc/default/cryptremote`
 
 - Insert script into sysinit process
 
 <code>
-insserv -d cryptomounts
+insserv -d cryptremote
 </code>
 

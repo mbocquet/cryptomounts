@@ -1,6 +1,6 @@
 #!/bin/bash
 ### BEGIN INIT INFO
-# Provides:          cryptomounts
+# Provides:          cryptremote
 # Required-Start:    $network $syslog
 # Required-Stop:     $network $syslog
 # Default-Start:     2 3 4 5
@@ -15,8 +15,8 @@
 
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
-DESC="Cryptomounts"
-NAME="cryptomounts"
+DESC="Cryptremote"
+NAME="cryptremote"
 SCRIPTNAME=/etc/init.d/$NAME
 
 # configuration variable file
@@ -53,7 +53,7 @@ do_stop()
 		then
 			continue
 		else
-#			cryptsetup luksClose ${DECRYPTED_NAME}
+			cryptsetup luksClose ${DECRYPTED_NAME}
 			true
 		fi
 	done</etc/default/$NAME
