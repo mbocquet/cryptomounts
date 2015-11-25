@@ -16,26 +16,8 @@ keyphrase is used to open LUKS volume(s). As volumes are opened, they can be
 mounted via autofs or fstab. Volume(s) unmounting is done via the standard
 shutdown process.
 
-In case autofs is used, its initscript must be modified to add 'cryptremote'
-as a dependency :
-
-/etc/init.d/autofs
-
-Replace :
-<pre>
-...
--# Required-Start: $network $remote_fs $syslog
--# Required-Stop: $network $remote_fs $syslog
-...
-</pre>
-
-by
-
-<pre>
-+# Required-Start: $network $remote_fs $syslog cryptremote
-+# Required-Stop: $network $remote_fs $syslog cryptremote
-...
-</pre>
+If autofs is used to mount these volumes, its initscript must be modified to add 'cryptremote'
+as a dependency
 
 ## Dependencies
 
@@ -70,6 +52,27 @@ cp cryptremote.default /etc/default/cryptremote
 insserv -d cryptremote
 </code>
 
+- Add cryptremote dependency to autofs
+
+/etc/init.d/autofs
+
+Replace :
+<pre>
+...
+-# Required-Start: $network $remote_fs $syslog
+-# Required-Stop: $network $remote_fs $syslog
+...
+</pre>
+
+by
+
+<pre>
+...
++# Required-Start: $network $remote_fs $syslog cryptremote
++# Required-Stop: $network $remote_fs $syslog cryptremote
+...
+</pre>
+
 ### Debian based distributions with systemd
 - copy `systemd/cryptremote.service` to `/etc/systemd/system/`
 
@@ -97,3 +100,24 @@ cp cryptremote.default /etc/default/cryptremote
 <code>
 systemctl daemon-reload
 </code>
+
+- Add cryptremote dependency to autofs
+
+/lib/systemd/system/autofs.service
+
+Replace :
+<pre>
+...
+-After=network.target ypbind.service sssd.service network-online.target
+-Wants=network-online.target
+...
+</pre>
+
+by
+
+<pre>
+...
+-After=network.target ypbind.service sssd.service network-online.target cryptremote.service
+-Wants=network-online.target cryptremote.service
+...
+</pre>
