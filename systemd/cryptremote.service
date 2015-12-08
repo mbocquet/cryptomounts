@@ -3,6 +3,7 @@ Description=Open LUKS volumes with remote keys
 After=network-online.target
 
 [Service]
+Type=oneshot
 ExecStart=/usr/local/sbin/cryptremote open
 
 [Install]
