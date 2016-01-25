@@ -26,36 +26,17 @@ as a dependency
 
 ## Installation
 ### Debian based distributions with sysinit
-- copy `sysinit/cryptremote.sysinit` to `/etc/init.d/cryptremote`
-
-<code>
-cp sysinit/cryptremote.sysinit /etc/init.d/cryptremote
-</code>
-
-- make the script executable
-
-<code>
-chmod +x /etc/init.d/cryptremote
-</code>
-
-- copy `cryptremote.default` to `/etc/default/cryptremote`
-
-<code>
-cp cryptremote.default /etc/default/cryptremote
-</code>
-
+- copy `sysinit/cryptremote.sysinit` to `/etc/init.d/cryptremote` 
+  `cp sysinit/cryptremote.sysinit /etc/init.d/cryptremote`
+- make the script executable 
+  `chmod +x /etc/init.d/cryptremote`
+- copy `cryptremote.default` to `/etc/default/cryptremote` 
+  `cp cryptremote.default /etc/default/cryptremote`
 - Customize `/etc/default/cryptremote`
-
-- Insert script into sysinit process
-
-<code>
-insserv -d cryptremote
-</code>
-
+- Insert script into sysinit process 
+  `insserv -d cryptremote`
 - Add cryptremote dependency to autofs
-
 /etc/init.d/autofs
-
 Replace :
 <pre>
 ...
@@ -81,10 +62,8 @@ cp systemd/cryptremote.service /etc/systemd/system/
 </code>
 
 - copy `systemd/cryptremote` to `/usr/local/sbin`
-- make the script executable
-
-<code>
-chmod +x /usr/local/sbin/cryptremote
+- make the script executable  
+  `chmod +x /usr/local/sbin/cryptremote`
 </code>
 
 - copy `cryptremote.default` to `/etc/default/cryptremote`  
