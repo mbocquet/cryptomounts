@@ -89,17 +89,9 @@ chmod +x /usr/local/sbin/cryptremote
 
 - copy `cryptremote.default` to `/etc/default/cryptremote`
 
-<code>
-cp cryptremote.default /etc/default/cryptremote
-</code>
+`cp cryptremote.default /etc/default/cryptremote`
 
 - Customize `/etc/default/cryptremote`
-
-- Reload systemd daemon
-
-<code>
-systemctl daemon-reload
-</code>
 
 - Add cryptremote dependency to autofs
 
@@ -121,3 +113,9 @@ by
 -Wants=network-online.target cryptremote.service
 ...
 </pre>
+
+- Reload systemd daemon
+
+<code>
+systemctl daemon-reload
+</code>
