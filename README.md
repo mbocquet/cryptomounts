@@ -87,7 +87,7 @@ cp systemd/cryptremote.service /etc/systemd/system/
 chmod +x /usr/local/sbin/cryptremote
 </code>
 
-- copy `cryptremote.default` to `/etc/default/cryptremote`
+- copy `cryptremote.default` to `/etc/default/cryptremote`  
   `cp cryptremote.default /etc/default/cryptremote`
 
 - Customize `/etc/default/cryptremote`
