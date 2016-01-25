@@ -53,26 +53,16 @@ by
 </pre>
 
 ### Debian based distributions with systemd
-- copy `systemd/cryptremote.service` to `/etc/systemd/system/`
-
-<code>
-cp systemd/cryptremote.service /etc/systemd/system/
-</code>
-
+- copy `systemd/cryptremote.service` to `/etc/systemd/system/`  
+`cp systemd/cryptremote.service /etc/systemd/system/`
 - copy `systemd/cryptremote` to `/usr/local/sbin`
 - make the script executable  
-  `chmod +x /usr/local/sbin/cryptremote`
-</code>
-
+`chmod +x /usr/local/sbin/cryptremote`
 - copy `cryptremote.default` to `/etc/default/cryptremote`  
-  `cp cryptremote.default /etc/default/cryptremote`
-
+`cp cryptremote.default /etc/default/cryptremote`
 - Customize `/etc/default/cryptremote`
-
-- Add cryptremote dependency to autofs
-
-/lib/systemd/system/autofs.service
-
+- Add cryptremote dependency to autofs  
+/lib/systemd/system/autofs.service  
 Replace :
 <pre>
 ...
@@ -80,18 +70,12 @@ Replace :
 -Wants=network-online.target
 ...
 </pre>
-
 by
-
 <pre>
 ...
 -After=network.target ypbind.service sssd.service network-online.target cryptremote.service
 -Wants=network-online.target cryptremote.service
 ...
 </pre>
-
-- Reload systemd daemon
-
-<code>
-systemctl daemon-reload
-</code>
+- Reload systemd daemon  
+`systemctl daemon-reload`
