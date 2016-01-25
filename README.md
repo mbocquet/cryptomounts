@@ -26,11 +26,11 @@ as a dependency
 
 ## Installation
 ### Debian based distributions with sysinit
-- copy `sysinit/cryptremote.sysinit` to `/etc/init.d/cryptremote` 
+- copy `sysinit/cryptremote.sysinit` to `/etc/init.d/cryptremote`  
   `cp sysinit/cryptremote.sysinit /etc/init.d/cryptremote`
-- make the script executable 
+- make the script executable  
   `chmod +x /etc/init.d/cryptremote`
-- copy `cryptremote.default` to `/etc/default/cryptremote` 
+- copy `cryptremote.default` to `/etc/default/cryptremote`  
   `cp cryptremote.default /etc/default/cryptremote`
 - Customize `/etc/default/cryptremote`
 - Insert script into sysinit process 
