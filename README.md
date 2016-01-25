@@ -55,7 +55,8 @@ by
 ### Debian based distributions with systemd
 - copy `systemd/cryptremote.service` to `/etc/systemd/system/`  
 `cp systemd/cryptremote.service /etc/systemd/system/`
-- copy `systemd/cryptremote` to `/usr/local/sbin`
+- copy `systemd/cryptremote` to `/usr/local/sbin`  
+`cp systemd/cryptremote /usr/local/sbin/`
 - make the script executable  
 `chmod +x /usr/local/sbin/cryptremote`
 - copy `cryptremote.default` to `/etc/default/cryptremote`  
