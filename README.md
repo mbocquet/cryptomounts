@@ -33,10 +33,10 @@ as a dependency
 - copy `cryptremote.default` to `/etc/default/cryptremote`  
   `cp cryptremote.default /etc/default/cryptremote`
 - Customize `/etc/default/cryptremote`
-- Insert script into sysinit process 
+- Insert script into sysinit process  
   `insserv -d cryptremote`
-- Add cryptremote dependency to autofs
-/etc/init.d/autofs
+- Add cryptremote dependency to autofs  
+/etc/init.d/autofs  
 Replace :
 <pre>
 ...
@@ -44,9 +44,7 @@ Replace :
 -# Required-Stop: $network $remote_fs $syslog
 ...
 </pre>
-
 by
-
 <pre>
 ...
 +# Required-Start: $network $remote_fs $syslog cryptremote
