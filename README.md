@@ -36,7 +36,7 @@ as a dependency
 - Insert script into sysinit process  
   `insserv -d cryptremote`
 - Add cryptremote dependency to autofs  
-/etc/init.d/autofs  
+`/etc/init.d/autofs`  
 Replace :
 <pre>
 ...
@@ -63,7 +63,7 @@ by
 `cp cryptremote.default /etc/default/cryptremote`
 - Customize `/etc/default/cryptremote`
 - Add cryptremote dependency to autofs  
-`mkdir /etc/systemd/system/autofs.service.d/`
+`mkdir /etc/systemd/system/autofs.service.d/`  
 `/etc/systemd/system/autofs.service.d/local.conf`
 <pre>
 [Unit]
@@ -73,11 +73,11 @@ Requires=cryptremote.service
 Note: 'Unit' is not 'unit', respect case !
 - Reload systemd daemon  
 `systemctl daemon-reload`
-- Enable `cryptremote.service` Unit
+- Enable `cryptremote.service` Unit  
 `systemctl enable cryptremote.service`
-- Reload autofs.service
+- Reload autofs.service  
   `systemctl reload autofs.service`
-- Check the status of autofs local.conf
+- Check the status of autofs local.conf  
   `systemctl status autofs.service`
   <pre>
   ● autofs.service - LSB: Automounts filesystems on demand
