@@ -63,20 +63,30 @@ by
 `cp cryptremote.default /etc/default/cryptremote`
 - Customize `/etc/default/cryptremote`
 - Add cryptremote dependency to autofs  
-/lib/systemd/system/autofs.service  
-Replace :
+`mkdir /etc/systemd/system/autofs.service.d/`
+`/etc/systemd/system/autofs.service.d/local.conf`
 <pre>
-...
--After=network.target ypbind.service sssd.service network-online.target
--Wants=network-online.target
-...
+[Unit]
+After=cryptremote.service
+Requires=cryptremote.service
 </pre>
-by
-<pre>
-...
--After=network.target ypbind.service sssd.service network-online.target cryptremote.service
--Wants=network-online.target cryptremote.service
-...
-</pre>
+Note: 'Unit' is not 'unit', respect case !
 - Reload systemd daemon  
 `systemctl daemon-reload`
+- Enable `cryptremote.service` Unit
+`systemctl enable cryptremote.service`
+- Reload autofs.service
+  `systemctl reload autofs.service`
+- Check the status of autofs local.conf
+  `systemctl status autofs.service`
+  <pre>
+  ● autofs.service - LSB: Automounts filesystems on demand
+     Loaded: loaded (/etc/init.d/autofs)
+    Drop-In: /etc/systemd/system/autofs.service.d
+             └─local.conf
+     Active: active (running) since mer. 2016-03-16 22:07:59 CET; 5s ago
+    Process: 2332 ExecStop=/etc/init.d/autofs stop (code=exited, status=0/SUCCESS)
+    Process: 2340 ExecStart=/etc/init.d/autofs start (code=exited, status=0/SUCCESS)
+     CGroup: /system.slice/autofs.service
+             └─2347 /usr/sbin/automount --pid-file /var/run/autofs.pid
+  </pre>
