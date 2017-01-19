@@ -2,7 +2,7 @@
 #
 # Open LUKS volumes that need remote resources
 #
-# Copyright © 2013-2016 Mathias Bocquet (mbocquet@sekoya.org)
+# Copyright © 2013-2017 Mathias Bocquet (mbocquet@sekoya.org)
 
 NAME="$(basename $0)"
 
