@@ -5,9 +5,11 @@ located on remote(s) server(s).
 
 ## Why ?
 
-- to mount LUKS volumes automatically without using a local keyfile or a USB
-  stick
-- to be able to disable remotely the next automount of volume(s)
+- to mount LUKS volumes automatically without using a local keyfile, USB stick
+  or interactive password.
+- to be able to disable remotely the next automount of volume(s).
+- to protect data hosted in a remote datacenter you can't trust, in case of
+  server / storage compromision or theft.
 
 ## How does it works ?
 
@@ -22,7 +24,7 @@ as a dependency
 ## Dependencies
 
 - curl
-- a proper .netrc file to access remote URL over https
+- a proper .netrc file to access remote URL over https without interactions
 
 ## Installation
 ### Debian based distributions with sysinit
