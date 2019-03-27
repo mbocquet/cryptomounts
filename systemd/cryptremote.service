@@ -5,6 +5,8 @@ After=network-online.target
 [Service]
 Type=oneshot
 ExecStart=/usr/local/sbin/cryptremote open
+RemainAfterExit=yes
+ExecStop=/usr/local/sbin/cryptremote close
 
 [Install]
 WantedBy=multi-user.target
