@@ -1,46 +1,63 @@
-#!/usr/bin/env bash
+#!/bin/bash
 #
-# Open LUKS volumes that need remote resources
+# Open LUKS volumes that need remote key
 #
-# Copyright © 2013-2017 Mathias Bocquet (mbocquet@sekoya.org)
+# Copyright © 2013-2019 Mathias Bocquet (mbocquet@sekoya.org)
 
 NAME="$(basename $0)"
 
-# configuration variable file
 CONFIG="/etc/default/$NAME"
+
+CRYPTSETUP_MAJOR=$(cryptsetup --version|awk '{print $2}'|awk -F. '{print $1}')
+
+case $CRYPTSETUP_MAJOR in
+    1)
+        CRYPTSETUP_OPEN="luksOpen"
+        CRYPTSETUP_CLOSE="luksClose"
+        ;;
+    2)
+        CRYPTSETUP_OPEN="open"
+        CRYPTSETUP_CLOSE="close"
+        ;;
+    *)
+        echo "Trouble getting cryptsetup major version"
+        exit 1
+        ;;
+esac
 
 do_open()
 {
-	while read ENCRYPTED_DEVICE DECRYPTED_NAME PASSPHRASE_URL
-	do
-		if ! [[ ${ENCRYPTED_DEVICE} =~ ^# ]]
-		then
-			PASSPHRASE="$(curl -ks --netrc-file /root/.netrc ${PASSPHRASE_URL})"
-			echo "${PASSPHRASE}"|cryptsetup luksOpen ${ENCRYPTED_DEVICE} ${DECRYPTED_NAME}
-		fi
-	done<$CONFIG
+    while read ENCRYPTED_DEVICE DECRYPTED_NAME PASSPHRASE_URL
+    do
+        if ! [[ ${ENCRYPTED_DEVICE} =~ ^# ]]
+        then
+            PASSPHRASE="$(curl -ks --netrc-file /root/.netrc ${PASSPHRASE_URL})"
+            echo "${PASSPHRASE}"|cryptsetup ${CRYPTSETUP_OPEN} ${ENCRYPTED_DEVICE} ${DECRYPTED_NAME}
+        fi
+    done<$CONFIG
 }
 
 do_close()
 {
-	while read ENCRYPTED_DEVICE DECRYPTED_NAME PASSPHRASE_URL
-	do
-		if ! [[ ${ENCRYPTED_DEVICE} =~ ^# ]]
-		then
-			cryptsetup luksClose ${DECRYPTED_NAME}
-		fi
-	done<$CONFIG
+    while read ENCRYPTED_DEVICE DECRYPTED_NAME PASSPHRASE_URL
+    do
+        if ! [[ ${ENCRYPTED_DEVICE} =~ ^# ]]
+        then
+            cryptsetup ${CRYPTSETUP_CLOSE} ${DECRYPTED_NAME}
+        fi
+    done<$CONFIG
 }
 
 case "$1" in
   open)
-	do_open
-	;;
+    do_open
+    systemd-notify --ready
+    ;;
   close)
-	do_close
-	;;
+    do_close
+    ;;
   *)
-	echo "Usage: $NAME {open|close}" >&2
-	exit 1
-	;;
+    echo "Usage: $NAME {open|close}" >&2
+    exit 1
+    ;;
 esac
