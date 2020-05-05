@@ -27,7 +27,9 @@ as a dependency
 - a proper .netrc file to access remote URL over https without interactions
 
 ## Installation
+
 ### Debian based distributions with sysinit
+
 - copy `sysinit/cryptremote.sysinit` to `/etc/init.d/cryptremote`  
   `cp sysinit/cryptremote.sysinit /etc/init.d/cryptremote`
 - make the script executable  
@@ -55,6 +57,7 @@ by
 </pre>
 
 ### Debian based distributions with systemd
+
 - copy `systemd/cryptremote.service` to `/etc/systemd/system/`  
 `cp systemd/cryptremote.service /etc/systemd/system/`
 - copy `systemd/cryptremote` to `/usr/local/sbin`  
@@ -66,11 +69,10 @@ by
 - Customize `/etc/default/cryptremote`
 - Add cryptremote dependency to autofs  
 `mkdir /etc/systemd/system/autofs.service.d/`  
-`/etc/systemd/system/autofs.service.d/local.conf`
+`/etc/systemd/system/autofs.service.d/override.conf`
 <pre>
 [Unit]
 After=cryptremote.service
-Requires=cryptremote.service
 </pre>
 Note: 'Unit' is not 'unit', respect case !
 - Reload systemd daemon  
@@ -79,13 +81,13 @@ Note: 'Unit' is not 'unit', respect case !
 `systemctl enable cryptremote.service`
 - Reload autofs.service  
   `systemctl reload autofs.service`
-- Check the status of autofs local.conf  
+- Check the status of autofs override.conf  
   `systemctl status autofs.service`
   <pre>
   ● autofs.service - LSB: Automounts filesystems on demand
      Loaded: loaded (/etc/init.d/autofs)
     Drop-In: /etc/systemd/system/autofs.service.d
-             └─local.conf
+             └─override.conf
      Active: active (running) since mer. 2016-03-16 22:07:59 CET; 5s ago
     Process: 2332 ExecStop=/etc/init.d/autofs stop (code=exited, status=0/SUCCESS)
     Process: 2340 ExecStart=/etc/init.d/autofs start (code=exited, status=0/SUCCESS)
